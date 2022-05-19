@@ -34,7 +34,7 @@ echo "--- Jest: merging coverage files and generating the final combined report"
 yarn nyc report --nycrc-path src/dev/code_coverage/nyc_config/nyc.jest.config.js
 
 echo "--- Functional: merging json files and generating the final combined report"
-souce .buildkite/scripts/steps/code_coverage/merge.sh
+source .buildkite/scripts/steps/code_coverage/merge.sh
 
 # TODO-TRE: When we do the FINAL MERGE, we may need replace our anchor (LEETRE) to the
 # KIBANA_DIR of the final merge worker so that the merge works: so they point to the
