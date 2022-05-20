@@ -44,7 +44,7 @@ echo "--- Functional: merging json files and generating the final combined repor
 
 set +e
 finalReplace target/kibana-coverage/functional/*.json
-splitCoverage
+splitCoverage target/kibana-coverage/functional
 splitMerge
 set -e
 

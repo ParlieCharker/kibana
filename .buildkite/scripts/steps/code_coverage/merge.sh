@@ -12,15 +12,15 @@ first=$base/first
 
 splitCoverage() {
   echo "--- Running splitCoverage"
-  count=$(ls $1 | wc -l | xargs) # xargs trims whitespace
+  count=$(ls "$1" | wc -l | xargs) # xargs trims whitespace
   echo "### total: $count"
 
   mkdir -p $first
-  half=$(($count / 2))
+  half=$((count / 2))
   echo "### half: $half"
 
   for x in $(seq 1 $half); do
-    mv "$1/$(ls $1 | head -1)" $first
+    mv "$1/$(ls "$x" | head -1)" $first
   done
 
   echo "### first half:"
@@ -52,5 +52,5 @@ finalReplace() {
 #  TODO-TRE: Drop hardcoded replacement anchor
   anchor=LEETRE
 #  sed -ie "s|$anchor|${KIBANA_DIR}|g" $targetPath
-  sed -ie "s|$anchor|/var/lib/jenkins/workspace/elastic+kibana+code-coverage/kibana|g" $targetPath
+  sed -ie "s|$anchor|/var/lib/jenkins/workspace/elastic+kibana+code-coverage/kibana|g" "$targetPath"
 }
