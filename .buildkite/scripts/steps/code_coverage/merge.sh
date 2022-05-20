@@ -39,18 +39,17 @@ splitCoverage() {
   half=$((count / 2))
   echo "### half: $half"
 
+  echo "--- Move the first half into the 'first' dir"
   # the index variable is irrelevant
   for x in $(seq 1 $half); do
     _head "$1"
-    #    echo "### Moving firstFile: ${firstFile}"
-    #    echo "### To first: ${first}"
     mv "$firstFile" "$first"
   done
 
-  for x in $(find "$target" -maxdepth 1 -type f -name '*.json'); do
-    echo "### x: ${x}"
+  echo "--- Move the second half into the 'rest' dir"
+  while read -r x; do
     mv "$x" "$rest" || printf "\n\t### Trouble moving %s to %s" "$x" "$rest"
-  done
+  done <<<"$(find "$target" -maxdepth 1 -type f -name '*.json')"
 }
 
 splitMerge() {
