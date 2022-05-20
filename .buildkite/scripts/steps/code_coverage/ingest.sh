@@ -41,16 +41,9 @@ source .buildkite/scripts/steps/code_coverage/merge.sh
 # current source absolute path
 
 set +e
-echo "--- List all before everything"
-listReports
 finalReplace
-echo "--- List all after final replace fn"
 splitCoverage
-echo "--- List all before split merge"
-listReports
 splitMerge
-echo "--- List all AFTER split merge"
-listReports
 set -e
 
 # archive reports to upload as build artifacts
