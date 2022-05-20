@@ -72,8 +72,8 @@ while read -r config; do
       mv target/kibana-coverage/functional/coverage-final.json "target/kibana-coverage/functional/${dasherized}-server-coverage.json"
     fi
   fi
-#  echo "--- Replace paths in configs loop, for SERVER COVERAGE"
-#  replacePaths "$KIBANA_DIR/target/kibana-coverage/functional"
+  #  echo "--- Replace paths in configs loop, for SERVER COVERAGE"
+  #  replacePaths "$KIBANA_DIR/target/kibana-coverage/functional"
 
   timeSec=$(($(date +%s) - start))
   if [[ $timeSec -gt 60 ]]; then
@@ -99,8 +99,15 @@ while read -r config; do
       failedConfigs="$config"
     fi
   fi
+
+  dirInLoop="target/dir-listing-$config.txt"
+  ls -l target/kibana-coverage/functional >"$dirInLoop"
+  buildkite-agent artifact upload "$dirInLoop"
 done <<<"$configs"
 
+postLoop="target/dir-listing-post-loop.txt"
+ls -l target/kibana-coverage/functional >"$postLoop"
+buildkite-agent artifact upload "$postLoop"
 # Each browser unload event, creates a new coverage file.
 # So, we merge them here.
 if [[ -d "$KIBANA_DIR/target/kibana-coverage/functional" ]]; then
@@ -113,6 +120,10 @@ if [[ -d "$KIBANA_DIR/target/kibana-coverage/functional" ]]; then
 else
   echo "--- Code coverage not found in: $KIBANA_DIR/target/kibana-coverage/functional"
 fi
+
+postMerge="target/dir-listing-post-merge.txt"
+ls -l target/kibana-coverage/functional >"$postMerge"
+buildkite-agent artifact upload "$postMerge"
 
 replacePaths() {
   for x in $(ls $1); do

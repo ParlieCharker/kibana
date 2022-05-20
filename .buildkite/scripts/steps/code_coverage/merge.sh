@@ -53,6 +53,15 @@ splitCoverage() {
   done
 }
 
+splitMerge() {
+  echo "--- Merge the 1st half of the coverage files"
+  yarn nyc merge target/kibana-coverage/functional/first target/kibana-coverage/functional/first.json
+  echo "--- Merge the 2nd half of the coverage files"
+  yarn nyc merge target/kibana-coverage/functional/rest target/kibana-coverage/functional/rest.json
+  echo "--- Report-Merge the 2 halves into one"
+  yarn nyc report --nycrc-path src/dev/code_coverage/nyc_config/nyc.functional.config.js
+}
+
 listReports() {
   ls -R $base
 }
