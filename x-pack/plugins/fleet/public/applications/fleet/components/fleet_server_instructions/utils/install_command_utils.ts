@@ -64,7 +64,7 @@ export function getInstallCommandForPlatform(
   const downloadCommand =
     platform === 'windows'
       ? [
-          `wget -Source ${artifact.fullUrl} -Destination ${artifact.filename}`,
+          `Start-BitsTransfer -Source ${artifact.fullUrl} -Destination ${artifact.filename}`,
           `Expand-Archive .\\${artifact.filename}`,
           `cd ${artifact.unpackedDir}`,
         ].join(`\n`)
