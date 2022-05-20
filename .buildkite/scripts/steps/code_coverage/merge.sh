@@ -9,6 +9,7 @@ export CODE_COVERAGE=1
 base=target/kibana-coverage
 target="$base/functional"
 first="$target/first"
+rest="$target/rest"
 
 filesCount() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -34,15 +35,21 @@ splitCoverage() {
   echo "### total: $count"
 
   mkdir -p $first
+  mkdir -p $rest
   half=$((count / 2))
   echo "### half: $half"
 
   # the index variable is irrelevant
   for x in $(seq 1 $half); do
     _head "$1"
-#    echo "### Moving firstFile: ${firstFile}"
-#    echo "### To first: ${first}"
+    #    echo "### Moving firstFile: ${firstFile}"
+    #    echo "### To first: ${first}"
     mv "$firstFile" "$first"
+  done
+
+  for x in $(find "$target" -maxdepth 1 -type f -name '*.json'); do
+    echo "### x: ${x}"
+    mv "$x" "$rest" || printf "\n\t### Trouble moving %s to %s" "$x" "$rest"
   done
 }
 
