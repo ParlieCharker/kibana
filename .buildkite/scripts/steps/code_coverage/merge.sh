@@ -51,5 +51,6 @@ finalReplace() {
   local targetPath=$1
 #  TODO-TRE: Drop hardcoded replacement anchor
   anchor=LEETRE
-  sed -ie "s|$anchor|${KIBANA_DIR}|g" $targetPath
+#  sed -ie "s|$anchor|${KIBANA_DIR}|g" $targetPath
+  sed -ie "s|$anchor|/var/lib/jenkins/workspace/elastic+kibana+code-coverage/kibana|g" $targetPath
 }
