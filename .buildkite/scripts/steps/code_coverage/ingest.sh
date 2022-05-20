@@ -30,11 +30,13 @@ echo "--- process HTML Links"
 echo "--- collect VCS Info"
 .buildkite/scripts/steps/code_coverage/reporting/collectVcsInfo.sh
 
+source .buildkite/scripts/steps/code_coverage/merge.sh
+
 echo "--- Jest: merging coverage files and generating the final combined report"
+finalReplace target/kibana-coverage/jest/*.json
 yarn nyc report --nycrc-path src/dev/code_coverage/nyc_config/nyc.jest.config.js
 
 echo "--- Functional: merging json files and generating the final combined report"
-source .buildkite/scripts/steps/code_coverage/merge.sh
 
 # TODO-TRE: When we do the FINAL MERGE, we may need replace our anchor (LEETRE) to the
 # KIBANA_DIR of the final merge worker so that the merge works: so they point to the
@@ -57,6 +59,6 @@ echo "--- Upload coverage static site"
 .buildkite/scripts/steps/code_coverage/reporting/uploadStaticSite.sh
 
 echo "--- Ingest results to Kibana stats cluster"
-.buildkite/scripts/steps/code_coverage/reporting/ingestData.sh 'Elastic/kibana-code-coverage' \
+.buildkite/scripts/steps/code_coverage/reporting/ingestData.sh 'elastic+kibana+code-coverage' \
   ${BUILDKITE_BUILD_NUMBER} ${BUILDKITE_BUILD_URL} ${previousSha} \
   'src/dev/code_coverage/ingest_coverage/team_assignment/team_assignments.txt'
