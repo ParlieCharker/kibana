@@ -100,7 +100,7 @@ while read -r config; do
     fi
   fi
 
-  dirInLoop="target/dir-listing-$config.txt"
+  dirInLoop="target/dir-listing-$dasherized.txt"
   ls -l target/kibana-coverage/functional >"$dirInLoop"
   buildkite-agent artifact upload "$dirInLoop"
 done <<<"$configs"
