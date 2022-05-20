@@ -41,7 +41,7 @@ source .buildkite/scripts/steps/code_coverage/merge.sh
 # current source absolute path
 
 set +e
-finalReplace
+finalReplace target/kibana-coverage/functional/*.json
 splitCoverage
 splitMerge
 set -e
