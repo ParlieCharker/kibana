@@ -12,7 +12,7 @@ first="$target/first"
 
 filesCount() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    count=$(find "$1" -maxdepth 1 -type f | grep -v .DS* | wc -l | xargs) # xargs trims whitespace
+    count=$(find "$1" -maxdepth 1 -type f | grep -vc ".DS*" | xargs) # xargs trims whitespace
   else
     count=$(find "$1" -maxdepth 1 -type f | wc -l | xargs) # xargs trims whitespace
   fi
@@ -20,8 +20,8 @@ filesCount() {
 
 _head() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    count=$(find "$1" -maxdepth 1 -type f | grep -v .DS* | wc -l | xargs) # xargs trims whitespace
-    firstFile=$(find "$1" -maxdepth 1 -type f | grep -v .DS* | head -1)
+    count=$(find "$1" -maxdepth 1 -type f | grep -vc ".DS*" | xargs) # xargs trims whitespace
+    firstFile=$(find "$1" -maxdepth 1 -type f | grep -v ".DS*" | head -1)
   else
     count=$(find "$1" -maxdepth 1 -type f | wc -l | xargs) # xargs trims whitespace
     firstFile=$(find "$1" -maxdepth 1 -type f | head -1)
@@ -39,9 +39,9 @@ splitCoverage() {
 
   # the index variable is irrelevant
   for x in $(seq 1 $half); do
-    _head $1
-    echo "### Moving firstFile: ${firstFile}"
-    echo "### To first: ${first}"
+    _head "$1"
+#    echo "### Moving firstFile: ${firstFile}"
+#    echo "### To first: ${first}"
     mv "$firstFile" "$first"
   done
 }
