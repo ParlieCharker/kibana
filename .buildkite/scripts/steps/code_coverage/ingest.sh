@@ -43,7 +43,7 @@ echo "--- Functional: merging json files and generating the final combined repor
 # current source absolute path
 
 set +e
-finalReplace target/kibana-coverage/functional/*.json
+finalReplace
 splitCoverage target/kibana-coverage/functional
 splitMerge
 set -e

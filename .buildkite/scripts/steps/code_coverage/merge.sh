@@ -68,9 +68,7 @@ listReports() {
 
 finalReplace() {
   echo "### KIBANA_DIR in finalReplace fn: $KIBANA_DIR"
-  local targetPath=$1
 #  TODO-TRE: Drop hardcoded replacement anchor
-  anchor=LEETRE
-#  sed -ie "s|$anchor|${KIBANA_DIR}|g" $targetPath
-  sed -ie "s|$anchor|/var/lib/jenkins/workspace/elastic+kibana+code-coverage/kibana|g" "$targetPath"
+  sed -ie "s|LEETRE|${KIBANA_DIR}|g" /Users/tre/main/target/kibana-coverage/functional/*.json
+#  sed -i '' -e "s|TREZKIBANADIR|/Users/tre/main|g" /Users/tre/main/target/kibana-coverage/functional/*.json
 }
