@@ -7,39 +7,43 @@ source .buildkite/scripts/common/util.sh
 export CODE_COVERAGE=1
 
 base=target/kibana-coverage
-target=$base/functional
-first=$base/first
+target="$base/functional"
+first="$target/first"
+
+filesCount() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    count=$(find "$1" -maxdepth 1 -type f | grep -v .DS* | wc -l | xargs) # xargs trims whitespace
+  else
+    count=$(find "$1" -maxdepth 1 -type f | wc -l | xargs) # xargs trims whitespace
+  fi
+}
+
+_head() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    count=$(find "$1" -maxdepth 1 -type f | grep -v .DS* | wc -l | xargs) # xargs trims whitespace
+    firstFile=$(find "$1" -maxdepth 1 -type f | grep -v .DS* | head -1)
+  else
+    count=$(find "$1" -maxdepth 1 -type f | wc -l | xargs) # xargs trims whitespace
+    firstFile=$(find "$1" -maxdepth 1 -type f | head -1)
+  fi
+}
 
 splitCoverage() {
   echo "--- Running splitCoverage"
-  count=$(ls "$1" | wc -l | xargs) # xargs trims whitespace
+  filesCount "$1"
   echo "### total: $count"
 
   mkdir -p $first
   half=$((count / 2))
   echo "### half: $half"
 
+  # the index variable is irrelevant
   for x in $(seq 1 $half); do
-    mv "$1/$(ls "$x" | head -1)" $first
+    _head $1
+    echo "### Moving firstFile: ${firstFile}"
+    echo "### To first: ${first}"
+    mv "$firstFile" "$first"
   done
-
-  echo "### first half:"
-  wc -l $first
-  echo "### rest"
-  wc -l $target
-}
-
-splitMerge() {
-  echo "--- Merge the first half of the coverage files"
-  firstCombined="${first}-combined"
-  mkdir -p $firstCombined
-  COVERAGE_TEMP_DIR=$first yarn nyc report --nycrc-path \
-    src/dev/code_coverage/nyc_config/nyc.functional.config.js --report-dir $firstCombined
-  mv "${firstCombined}/*.json" $target || echo "--- No coverage files found at ${firstCombined}/*.json"
-  mv "${firstCombined}/**/*.json" $target || echo "--- No coverage files found at ${firstCombined}/**/*.json"
-
-  echo "--- Merge the rest of the coverage files"
-  yarn nyc report --nycrc-path src/dev/code_coverage/nyc_config/nyc.functional.config.js
 }
 
 listReports() {
